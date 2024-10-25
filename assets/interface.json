@@ -44,7 +44,7 @@
     "任务选项1": {
       "cases": [
         {
-          "name": "文本1",
+          "name": "五铢钱",
           "pipeline_override": {
             "OcrTask": {
               "text": "文本1"
@@ -52,7 +52,7 @@
           }
         },
         {
-          "name": "文本2",
+          "name": "经验书",
           "pipeline_override": {
             "OcrTask": {
               "text": "文本2"

@@ -1,0 +1,20 @@
+{
+    "controller": {
+        "name": "桌面端"
+    },
+    "win32": {
+        "hwnd": "0x700f0"
+    },
+    "resource": "官服",
+    "task": [
+        {
+            "name": "清鸟食",
+            "option": [
+                {
+                    "name": "任务选项1",
+                    "value": "五铢钱"
+                }
+            ]
+        }
+    ]
+}
