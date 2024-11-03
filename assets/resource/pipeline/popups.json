@@ -109,9 +109,8 @@
   "退出关卡扫荡popup": {
     "recognition": "TemplateMatch",
     "template": "exit_popup.png",
-    "roi": [656, 417, 53, 49],
+    "roi": [561, 264, 158, 181],
     "action": "Click",
-    "target": [636, 196, 57, 59],
     "post_delay": 1000
   },
   "点击增加扫荡次数": {
@@ -126,5 +125,12 @@
     "post_wait_freezes": 500,
     "next": ["体力不足check", "已在界面-历练"],
     "interrupt": ["返回上级界面"]
+  },
+  "进度保存中断": {
+    "recognition": "OCR",
+    "expected": "进度已经保存",
+    "roi": [45, 507, 623, 145],
+    "action": "Click",
+    "target": [416, 751, 174, 42]
   }
 }
