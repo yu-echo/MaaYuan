@@ -33,10 +33,11 @@
     "roi": [257, 1052, 201, 95],
     "action": "Click",
     "pre_delay": 1000,
-    "next": ["点击开始观星"],
-    "interrupt": ["观星-自动分解提示"]
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "点击开始观星"]
   },
   "观星-自动分解提示": {
+    "is_sub": true,
     "recognition": "OCR",
     "expected": "今日不再提醒",
     "roi": [251, 851, 222, 112],
@@ -89,8 +90,8 @@
     "roi": [257, 1052, 201, 95],
     "action": "Click",
     "pre_delay": 1000,
-    "next": ["观星-一键再观一次"],
-    "interrupt": ["观星-自动分解提示"]
+    "post_delay": 1000,
+    "next": ["观星-自动分解提示", "观星-一键再观一次"]
   },
   "观星-一键再观一次": {
     "action": "Click",
