@@ -29,6 +29,7 @@
       "new今日不再提醒popup",
       "退出关卡扫荡popup",
       "进度保存中断",
+      "退出据点派遣popup",
       "返回上级界面"
     ]
   },
@@ -219,7 +220,7 @@
   },
   "已在界面-心纸营建": {
     "recognition": "OCR",
-    "expected": "史君小鋪",
+    "expected": "史君",
     "roi": [69, 1007, 165, 96]
   },
   "进入界面-主线故事": {
@@ -397,14 +398,15 @@
   "找到入口-地宫": {
     "recognition": "OCR",
     "expected": "地宫",
+    "replace": ["地宮", "地宫"],
     "roi": [335, 446, 183, 150],
     "action": "Click",
     "post_delay": 2000
   },
   "已在界面-地宫": {
-    "recognition": "OCR",
-    "expected": "秘宝兑换",
-    "roi": [555, 163, 132, 59]
+    "recognition": "TemplateMatch",
+    "template": "mainmap/deepdungeon.png",
+    "roi": [531, 44, 52, 68]
   },
   "进入界面-名册": {
     "next": ["已在界面-名册"],

@@ -62,6 +62,7 @@
     "enabled": true,
     "recognition": "OCR",
     "expected": "請求出戰",
+    "replace": ["請末出戰", "請求出戰"],
     "action": "Click",
     "target_offset": [0, 392, 0, 0],
     "next": ["指定鸟食战斗队伍", "开始战斗", "气力值回复"],
@@ -110,10 +111,11 @@
   "物资支援提交": {
     "recognition": "OCR",
     "roi": [480, 711, 155, 64],
+    "pre_delay": 500,
     "expected": "提交",
     "action": "Click",
     "next": ["气力值回复", "点击空白处关闭"],
-    "on_error": ["物资支援提交"]
+    "on_error": ["stop"]
   },
   "决策事件选择": {
     "recognition": "OCR",
@@ -142,7 +144,7 @@
     "recognition": "TemplateMatch",
     "template": "common_reward.png",
     "roi": [217, 269, 262, 132],
-    "threshold": 0.5,
+    "green_mask": true,
     "action": "Click",
     "target_offset": [0, -100, 0, 0],
     "next": ["待办公务可做任务"],

@@ -13,6 +13,14 @@
     "focus_tip": "检测到鸟食不足，行动中止",
     "next": ["stop"]
   },
+  "心纸营建行动力不足check": {
+    "recognition": "TemplateMatch",
+    "template": "platinum.png",
+    "roi": [198, 630, 75, 79],
+    "focus": true,
+    "focus_tip": "检测到心纸营建行动力不足，行动中止",
+    "next": ["stop"]
+  },
   "体力不足check": {
     "recognition": "TemplateMatch",
     "template": "platinum.png",
@@ -27,6 +35,17 @@
     "roi": [248, 332, 215, 70],
     "focus": true,
     "focus_tip": "检测到历练次数不足，行动中止",
+    "next": ["stop"]
+  },
+  "洛阳铲不足check": {
+    "recognition": "OCR",
+    "expected": "購買",
+    "roi": [439, 657, 121, 64],
+    "pre_delay": 500,
+    "action": "Click",
+    "target": [173, 669, 84, 44],
+    "focus": true,
+    "focus_tip": "检测到洛阳铲不足，行动中止",
     "next": ["stop"]
   },
   "确认回复气力值": {
@@ -100,6 +119,13 @@
     "recognition": "OCR",
     "expected": "確定",
     "action": "Click"
+  },
+  "退出据点派遣popup": {
+    "recognition": "TemplateMatch",
+    "template": "exit_popup.png",
+    "roi": [631, 83, 75, 58],
+    "action": "Click",
+    "post_delay": 1000
   },
   "退出白鹄popup": {
     "recognition": "TemplateMatch",
