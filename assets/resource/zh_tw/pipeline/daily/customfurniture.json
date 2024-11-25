@@ -26,7 +26,7 @@
     "green_mask": true,
     "action": "Click",
     "pre_delay": 200,
-    "target_offset": [0, -120, 0, 0]
+    "target": [633, 22, 19, 11]
   },
   "心纸营建历险-开始": {
     "recognition": "TemplateMatch",
@@ -59,6 +59,8 @@
     "is_sub": true,
     "recognition": "OCR",
     "expected": "結算",
+    "pre_delay": 200,
+    "action": "Click",
     "roi": [579, 1137, 88, 52],
     "next": ["心纸营建历险-跳过奖励"]
   },
@@ -77,7 +79,7 @@
     "roi": [25, 13, 681, 674],
     "pre_delay": 200,
     "action": "Click",
-    "target_offset": [0, -120, 0, 0]
+    "target": [633, 22, 19, 11]
   },
   "心纸营建历险-佛脚获取": {
     "recognition": "OCR",
