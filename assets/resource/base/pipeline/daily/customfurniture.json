@@ -23,6 +23,7 @@
     "recognition": "TemplateMatch",
     "template": "common_reward.png",
     "green_mask": true,
+    "threshold": 0.6,
     "action": "Click",
     "pre_delay": 200,
     "target": [633, 22, 19, 11]
@@ -30,7 +31,7 @@
   "心纸营建历险-开始": {
     "recognition": "TemplateMatch",
     "template": "temp/longdidong-furniture.png",
-    "roi": [295, 1101, 128, 134],
+    "roi": [255, 1101, 200, 200],
     "pre_delay": 200,
     "action": "Click",
     "next": ["心纸营建历险-材料搜寻"]
@@ -75,6 +76,7 @@
     "recognition": "TemplateMatch",
     "template": "common_reward.png",
     "green_mask": true,
+    "threshold": 0.6,
     "roi": [25, 13, 681, 674],
     "pre_delay": 200,
     "action": "Click",
@@ -105,7 +107,7 @@
   "心纸营建历险-选人界面": {
     "recognition": "TemplateMatch",
     "template": "temp/longdidong-selectagent.png",
-    "roi": [168, 577, 44, 49],
+    "roi": [148, 566, 69, 92],
     "action": "Click",
     "next": ["心纸营建历险-选择指定密探"]
   },
