@@ -13,7 +13,9 @@ Windows 端图形界面基于 **[MFAWPF](https://github.com/SweetSmellFox/MFAWPF
 
 建议将模拟器分辨率配置固定为 `16:9` 或 `9:16` 。
 
-作业生成器 `Maa鸢/司命` 开发测试中，[点我下载作业生成器](https://github.com/syoius/MaaYuan-SiMing/releases)，[点我进入临时作业站](https://paknm3t9phd.feishu.cn/base/EHEpboaDEafLTjsjq8HcIDrJntc)。
+作业生成器 `Maa鸢/司命` 开发测试中，[点我下载作业生成器](https://github.com/syoius/MaaYuan-SiMing/releases)，[点我进入临时作业站](https://td3nqr3477.feishu.cn/base/BtwRb6yvxaRAsis3uVCccLVKnWg?table=tbl6DolUZQaGOMIb&view=vew54wfNwm)。
+
+✨ 如果喜欢MaaYuan，欢迎在项目右上角点亮Star支持 ✨
 
 ## 功能介绍
 
@@ -26,16 +28,16 @@ Windows 端图形界面基于 **[MFAWPF](https://github.com/SweetSmellFox/MFAWPF
   > 开启无限循环和自动吃鸟食时，也**不会**消耗白金币购买鸟食。
 
   - 🚀 模拟器、游戏自启动
-  - 📜 鸢报（清鸟食）
+  - 📜 鸢报鸢报四合一（清鸟食）
   - 💰 领月卡福利
   - 🍚 领取每日进膳体力
   - 🏯 据点日常（✔ 派遣 ✔ 据点情报）
-  - 🔮 观星（✔ 观一次 ✔ 一键观星（消耗 20w 钱后停止） ✔ 六步观星法）
+  - 🔮 观星（✔ 观一次 ✔ 一键观星（需月卡） ✔ 六步观星法）
   - 🏮 历练（✔ 自定义关卡 + 等级 + 次数）
-  - 🗡 白鹄行动扫荡
-  - 🗡 地宫扫荡
-  - 🔨 心纸营建（隆地东）
-  - 🔶 其他日常（✔ 每日分享 ✔ 相见互动 ✔ 家具互动）
+  - 🗡 白鹄行动扫荡（✔每日扫荡 +领奖）
+  - 🗡 地宫扫荡（✔ 每日扫荡 ✔ 雀部解密）
+  - 🔨 心纸营建（✔隆地东 ✔春山重重 ✔游春集）
+  - 🔶 其他日常（✔ 每日分享 ✔ 相见互动 ✔ 家具互动✔ 首位密探升级）
 
 - 🛠 其他护肝功能
 
@@ -55,10 +57,10 @@ Windows 端图形界面基于 **[MFAWPF](https://github.com/SweetSmellFox/MFAWPF
   - 官方提供 5 种预设，可直接载入使用
     - `代号鸢日常模板`
     - `如鸢日常模板`
-    - `特色功能合集`
+    - `特色功能合集` （活动期间有刷取专项预设！）
     - `新版全部功能`
     - `旧版全部功能`
-  - 可根据需求在任务列表中 添加 / 删除任务、选择不同设置，为不同账号创建不同预设方案，一键载入，自动长草
+  - 可根据需求在任务列表中 添加 / 删除 / 切换 任务，为不同账号创建不同预设方案，一键长草~
 
 ## 使用说明
 
