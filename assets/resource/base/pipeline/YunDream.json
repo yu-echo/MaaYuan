@@ -134,7 +134,7 @@
     "recognition": "OCR",
     "expected": "进",
     "action": "Click",
-    "roi": [515, 1034, 104, 630],
+    "roi": [469, 1000, 188, 188],
     "post_delay": 3000,
     "next": [
       "云梦事件-下一步",
@@ -438,7 +438,7 @@
     "action": "Click",
     "next": ["云梦事件-下一步"],
     "interrupt": ["云梦事件-激活羁绊"],
-    "timeout": 4000,
+    "timeout": 6000,
     "on_error": ["云梦事件-选择降神符", "云梦-选择超时"],
     "focus": true,
     "focus_tip": "降神符-确认选择"
