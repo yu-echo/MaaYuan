@@ -5,8 +5,6 @@
   "代号鸢港服": {
     "enabled": false,
     "next": [
-      "心纸君",
-      "据点",
       "sub_断网重登",
       "sub_更新确定",
       "sub_隐私政策关闭",
@@ -14,6 +12,9 @@
       "sub_开始游戏",
       "sub_公告关闭",
       "sub_弹窗关闭",
+      "sub_大鸟签到",
+      "心纸君",
+      "据点",
       "sub_启动代号鸢港"
     ],
     "focus": true,
@@ -22,8 +23,6 @@
   "代号鸢台服": {
     "enabled": false,
     "next": [
-      "心纸君",
-      "据点",
       "sub_断网重登",
       "sub_更新确定",
       "sub_隐私政策关闭",
@@ -31,16 +30,59 @@
       "sub_开始游戏",
       "sub_公告关闭",
       "sub_弹窗关闭",
+      "sub_大鸟签到",
+      "心纸君",
+      "据点",
       "sub_启动代号鸢台"
     ],
     "focus": true,
     "focus_tip": "启动代号鸢台服"
   },
+  "sub_大鸟签到": {
+    "is_sub": true,
+    "recognition": "TemplateMatch",
+    "template": "login/example.png",
+    "green_mask": true,
+    "order_by": "Score",
+    "roi": [0, 306, 705, 774],
+    "action": "Click",
+    "pre_delay": 300,
+    "next": ["确认收取大鸟签到"]
+  },
+  "确认收取大鸟签到": {
+    "recognition": "TemplateMatch",
+    "template": "common_reward.png",
+    "green_mask": true,
+    "threshold": 0.6,
+    "roi": [25, 13, 681, 674],
+    "pre_delay": 200,
+    "action": "Click",
+    "target": [633, 22, 19, 11],
+    "next": ["大鸟签到-触发弹窗"]
+  },
+  "大鸟签到-触发弹窗": {
+    "recognition": "TemplateMatch",
+    "template": "mainmap/xinzhi.png",
+    "roi": [226, 1021, 137, 155],
+    "pre_delay": 200,
+    "action": "Click",
+    "post_delay": 2000,
+    "next": ["返回上级界面"]
+  },
+  "sub_活动弹窗关闭": {
+    "is_sub": true,
+    "recognition": "OCR",
+    "expected": "签到",
+    "roi": [91, 1156, 535, 115],
+    "action": "Click",
+    "target": [640, 0, 51, 43]
+  },
   "心纸君": {
     "recognition": "TemplateMatch",
     "template": "mainmap/xinzhi.png",
     "roi": [226, 1021, 137, 155],
-    "next": ["sub_弹窗关闭", "据点"],
+    "post_delay": 2000,
+    "next": ["sub_大鸟签到", "sub_活动弹窗关闭", "sub_弹窗关闭", "据点"],
     "on_error": ["stop"],
     "timeout": 4000
   },
@@ -112,7 +154,7 @@
     "action": "Click",
     "post_wait_freezes": {
       "time": 3000,
-      "target": [218, 1072, 284, 71]
+      "target": [24, 0, 144, 52]
     }
   },
   "sub_更新确定": {
