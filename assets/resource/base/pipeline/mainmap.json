@@ -63,7 +63,7 @@
     "recognition": "TemplateMatch",
     "template": "back_af.png",
     "green_mask": true,
-    "threshold": 0.5,
+    "threshold": 0.45,
     "roi": [6, 8, 123, 112],
     "pre_delay": 500,
     "action": "Click",
@@ -110,7 +110,10 @@
   "OCR找到入口-鸢报": {
     "recognition": "OCR",
     "expected": "鸢",
-    "replace": ["鸟", "鸢"],
+    "replace": [
+      ["鸟", "鸢"],
+      ["报", "鸢"]
+    ],
     "roi": [253, 589, 47, 86],
     "action": "Click",
     "post_delay": 2000
@@ -119,6 +122,7 @@
     "recognition": "TemplateMatch",
     "template": "mainmap/yuanbao.png",
     "roi": [253, 589, 47, 86],
+    "threshold": 0.6,
     "action": "Click",
     "post_delay": 2000
   },
@@ -182,7 +186,7 @@
   "已在界面-首位密探": {
     "recognition": "OCR",
     "expected": "密探列表",
-    "roi": [576, 761, 141, 71]
+    "roi": [561, 759, 158, 116]
   },
   "进入界面-心纸君": {
     "next": ["已在界面-心纸君"],
@@ -211,7 +215,7 @@
     "recognition": "TemplateMatch",
     "template": "house/call.png",
     "roi": [0, 978, 225, 155],
-    "threshold": 0.7
+    "threshold": 0.8
   },
   "进入界面-心纸营建": {
     "next": ["已在界面-心纸营建"],
@@ -459,7 +463,7 @@
   "已在界面-名册": {
     "recognition": "OCR",
     "expected": "密探",
-    "roi": [335, 87, 100, 64]
+    "roi": [330, 86, 185, 114]
   },
   "进入界面-商城": {
     "next": ["已在界面-商城"],
