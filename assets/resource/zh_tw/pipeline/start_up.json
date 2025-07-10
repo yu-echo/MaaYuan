@@ -2,6 +2,9 @@
   "启动游戏版本": {
     "next": ["切换账号启动", "代号鸢港服", "代号鸢台服"]
   },
+  "启动再等等": {
+    "post_delay": 5000
+  },
   "代号鸢港服": {
     "enabled": false,
     "next": [
@@ -20,6 +23,7 @@
       "据点",
       "sub_启动代号鸢港"
     ],
+    "interrupt": ["启动再等等"],
     "focus": "启动代号鸢港服"
   },
   "代号鸢台服": {
@@ -40,6 +44,7 @@
       "据点",
       "sub_启动代号鸢台"
     ],
+    "interrupt": ["启动再等等"],
     "focus": "启动代号鸢台服"
   },
   "sub_大鸟签到": {
@@ -127,7 +132,7 @@
     "recognition": "TemplateMatch",
     "template": "popup_skip_L.png",
     "green_mask": true,
-    "threshold": 0.47,
+    "threshold": 0.57,
     "roi": [200, 1049, 329, 102],
     "action": "Click",
     "post_delay": 500
