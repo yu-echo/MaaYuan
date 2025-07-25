@@ -90,9 +90,11 @@
     "recognition": "OCR",
     "roi": [331, 620, 56, 35],
     "expected": "10",
+    "model": "en",
     "only_rec": true,
     "replace": [
       ["一", "1"],
+      ["１", "1"],
       ["上", "4"],
       ["白", "6"],
       ["丨", "7"]
@@ -171,9 +173,11 @@
     "recognition": "OCR",
     "roi": [331, 620, 56, 35],
     "expected": "1",
+    "model": "en",
     "only_rec": true,
     "replace": [
       ["一", "1"],
+      ["１", "1"],
       ["上", "4"],
       ["白", "6"],
       ["丨", "7"]
@@ -220,6 +224,7 @@
     "recognition": "OCR",
     "expected": "史君",
     "roi": [69, 1007, 165, 96],
+    "pre_delay": 500,
     "action": "Click",
     "target": [591, 664, 42, 96],
     "next": ["心纸营建历险-进入宝库"]
