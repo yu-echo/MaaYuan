@@ -54,6 +54,11 @@
         width: 500px;
         height: 500px;
         overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .image-container:active {
+        transform: scale(0.98);
       }
 
       .preload-container {
@@ -68,17 +73,19 @@
       .image-container img {
         max-width: 100%;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.5s ease, transform 0.3s ease;
         position: relative;
         background-color: transparent;
         z-index: 1;
         max-height: 100%;
         object-fit: contain;
         background-color: transparent;
+        transform: scale(0.95);
       }
 
       .image-container img.loaded {
         opacity: 1;
+        transform: scale(1);
       }
 
       .image-tooltip {
@@ -169,7 +176,6 @@
       }
 
       .normal-content {
-        /* 恢复原有样式，仅移除 display: none; */
         flex: 1 1 300px;
         text-align: left;
         padding: 20px;
@@ -212,10 +218,15 @@
         margin: 10px;
         text-align: center;
         box-sizing: border-box;
+        transition: background-color 0.3s, transform 0.2s;
       }
 
       .normal-content a:hover {
         background-color: rgba(214, 156, 29, 0.87);
+      }
+
+      .normal-content a:active {
+        transform: scale(0.97);
       }
 
       .normal-content .text-link {
@@ -242,6 +253,26 @@
         transform: translate(-50%, -50%);
         z-index: 5;
         cursor: pointer;
+      }
+
+      /* 加载动画 */
+      .image-loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(223, 203, 178, 0.3);
+        border-radius: 50%;
+        border-top-color: #d78935;
+        animation: spin 1s ease-in-out infinite;
+        z-index: 2;
+        display: none;
+      }
+      
+      @keyframes spin {
+        to { transform: translate(-50%, -50%) rotate(360deg); }
       }
 
       /* 移动端优化 */
@@ -276,7 +307,7 @@
           margin: 0 auto;
         }
         .overlay-text {
-          max-height: 100px; /* 限制最大高度 */
+          max-height: 100px;
         }
         .hint-text {
           font-size: 14px;
@@ -312,7 +343,6 @@
           width: 150px;
           height: 150px;
         }
-        /* 改进tooltip的触摸交互 */
         .image-tooltip {
           max-width: 90%;
           padding: 10px 15px;
@@ -322,6 +352,10 @@
           transform: translateX(-50%);
           bottom: 20px;
           top: auto !important;
+        }
+        .image-loading {
+          width: 30px;
+          height: 30px;
         }
       }
 
@@ -337,7 +371,7 @@
         .overlay-text {
           height: auto;
           min-height: 0;
-          max-height: 100px; /* 限制最大高度 */
+          max-height: 100px;
           padding: 15px 10px;
           font-size: 22px;
           display: flex;
@@ -371,16 +405,6 @@
         }
       }
 
-      /* 添加延迟加载样式 */
-      .lazy-load {
-        opacity: 0;
-        transition: opacity 0.5s ease;
-      }
-
-      .lazy-load.loaded {
-        opacity: 1;
-      }
-
       /* 移动端触摸反馈 */
       @media (hover: none) {
         .image-container:active {
@@ -391,7 +415,6 @@
         }
       }
 
-      /* 让下载链接区域更整齐 */
       .normal-content .download-links {
         display: flex;
         flex-wrap: wrap;
@@ -421,6 +444,8 @@
     <div class="container">
       <div class="content-row">
         <div class="image-container">
+          <!-- 添加加载指示器 -->
+          <div class="image-loading" id="imageLoading"></div>
           <img
             id="randomImage"
             src=""
@@ -516,106 +541,123 @@
     <script>
       // 页面加载完成后执行
       document.addEventListener("DOMContentLoaded", function () {
-        function checkImagesExist() {
-          function imageExists(url, callback) {
-            const img = new Image();
-            img.onload = function () {
-              callback(true);
+        // 应用状态管理
+        const state = {
+          isMobile: window.innerWidth <= 768,
+          currentIndex: 0,
+          imageConfig: null,
+          isImageLoading: false
+        };
+        
+        // DOM元素引用
+        const elements = {
+          randomImage: document.getElementById('randomImage'),
+          imageLoading: document.getElementById('imageLoading'),
+          imageContainer: document.querySelector('.image-container'),
+          imageTooltip: document.querySelector('.image-tooltip')
+        };
+        
+        // 工具函数
+        const utils = {
+          // 检查图片是否存在
+          imageExists: (url) => {
+            return new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve(true);
+              img.onerror = () => resolve(false);
+              img.src = url;
+            });
+          },
+          
+          // 防抖函数
+          debounce: (func, wait) => {
+            let timeout;
+            return function executedFunction(...args) {
+              const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+              };
+              clearTimeout(timeout);
+              timeout = setTimeout(later, wait);
             };
-            img.onerror = function () {
-              callback(false);
-            };
-            img.src = url;
           }
-          const checkPromises = [];
-          [
-            "assets/cat-mobile.png",
-            "assets/dog-mobile.png",
-            "assets/fox-mobile.png",
-            "assets/angel-mobile.png",
-            "assets/bee-mobile.png",
-            "assets/bull-mobile.png",
-            "assets/bunny-mobile.png",
-            "assets/devil-mobile.png",
-            "assets/grey-mobile.png",
-            "assets/leopard-mobile.png",
-            "assets/niulang-mobile.png",
-            "assets/zhinv-mobile.png",
-          ].forEach((path) => {
-            checkPromises.push(
-              new Promise((resolve) => {
-                imageExists(path, (exists) => {
-                  resolve({ path: path, exists: exists });
-                });
-              })
-            );
-          });
-          return Promise.all(checkPromises);
+        };
+        
+        // 初始化应用
+        async function initApp() {
+          // 检查移动端图片是否存在
+          const mobileImageCheck = await checkMobileImages();
+          
+          // 设置图片配置
+          setupImageConfig(mobileImageCheck);
+          
+          // 预加载图片
+          preloadImages();
+          
+          // 初始化图片显示
+          initImageDisplay();
+          
+          // 设置事件监听
+          setupEventListeners();
         }
-
-        checkImagesExist().then((results) => {
-          const hasMobileImages = results.some((result) => result.exists);
-          const imageConfig = {
+        
+        // 检查移动端图片
+        async function checkMobileImages() {
+          const mobileImages = [
+            "assets/cat-mobile.png", "assets/dog-mobile.png", "assets/fox-mobile.png",
+            "assets/angel-mobile.png", "assets/bee-mobile.png", "assets/bull-mobile.png",
+            "assets/bunny-mobile.png", "assets/devil-mobile.png", "assets/grey-mobile.png",
+            "assets/leopard-mobile.png", "assets/niulang-mobile.png", "assets/zhinv-mobile.png"
+          ];
+          
+          const results = await Promise.all(
+            mobileImages.map(async (path) => ({
+              path,
+              exists: await utils.imageExists(path)
+            }))
+          );
+          
+          return results.some(result => result.exists);
+        }
+        
+        // 设置图片配置
+        function setupImageConfig(hasMobileImages) {
+          state.imageConfig = {
             desktop: {
               paths: [
-                "assets/cat.png",
-                "assets/dog.png",
-                "assets/fox.png",
-                "assets/bird.png",
-                "assets/angel.png",
-                "assets/bee.png",
-                "assets/bull.png",
-                "assets/bunny.png",
-                "assets/devil.png",
-                "assets/grey.png",
-                "assets/leopard.png",
-                "assets/niulang.png",
-                "assets/zhinv.png",
+                "assets/cat.png", "assets/dog.png", "assets/fox.png", "assets/bird.png",
+                "assets/angel.png", "assets/bee.png", "assets/bull.png", "assets/bunny.png",
+                "assets/devil.png", "assets/grey.png", "assets/leopard.png", 
+                "assets/niulang.png", "assets/zhinv.png"
               ],
               width: 500,
-              height: 500,
+              height: 500
             },
             mobile: {
-              paths: hasMobileImages
-                ? [
-                    "assets/cat-mobile.png",
-                    "assets/dog-mobile.png",
-                    "assets/fox-mobile.png",
-                    "assets/bird-mobile.png",
-                    "assets/angel-mobile.png",
-                    "assets/bee-mobile.png",
-                    "assets/bull-mobile.png",
-                    "assets/bunny-mobile.png",
-                    "assets/devil-mobile.png",
-                    "assets/grey-mobile.png",
-                    "assets/leopard-mobile.png",
-                    "assets/niulang-mobile.png",
-                    "assets/zhinv-mobile.png",
-                  ]
-                : [
-                    "assets/cat.png",
-                    "assets/dog.png",
-                    "assets/fox.png",
-                    "assets/bird.png",
-                    "assets/angel.png",
-                    "assets/bee.png",
-                    "assets/bull.png",
-                    "assets/bunny.png",
-                    "assets/devil.png",
-                    "assets/grey.png",
-                    "assets/leopard.png",
-                    "assets/niulang.png",
-                    "assets/zhinv.png",
-                  ],
+              paths: hasMobileImages ? [
+                "assets/cat-mobile.png", "assets/dog-mobile.png", "assets/fox-mobile.png",
+                "assets/bird-mobile.png", "assets/angel-mobile.png", "assets/bee-mobile.png",
+                "assets/bull-mobile.png", "assets/bunny-mobile.png", "assets/devil-mobile.png",
+                "assets/grey-mobile.png", "assets/leopard-mobile.png", 
+                "assets/niulang-mobile.png", "assets/zhinv-mobile.png"
+              ] : [
+                "assets/cat.png", "assets/dog.png", "assets/fox.png", "assets/bird.png",
+                "assets/angel.png", "assets/bee.png", "assets/bull.png", "assets/bunny.png",
+                "assets/devil.png", "assets/grey.png", "assets/leopard.png", 
+                "assets/niulang.png", "assets/zhinv.png"
+              ],
               width: 350,
-              height: 350,
-            },
+              height: 350
+            }
           };
-          let isMobile = window.innerWidth <= 768;
-          const currentConfig = isMobile
-            ? imageConfig.mobile
-            : imageConfig.desktop;
+        }
+        
+        // 预加载图片
+        function preloadImages() {
+          const currentConfig = state.isMobile ? 
+            state.imageConfig.mobile : state.imageConfig.desktop;
           const preloadContainer = document.querySelector(".preload-container");
+          
           currentConfig.paths.forEach((path) => {
             const img = document.createElement("img");
             img.src = path;
@@ -623,133 +665,154 @@
             img.style.display = "none";
             preloadContainer.appendChild(img);
           });
-          let currentIndex = Math.floor(
-            Math.random() * currentConfig.paths.length
-          );
-          let selectedImage = currentConfig.paths[currentIndex];
-          const randomImage = document.getElementById("randomImage");
-          const imageTooltip = document.querySelector(".image-tooltip");
-          // 设置一个加载占位图
-          randomImage.src =
+        }
+        
+        // 初始化图片显示
+        function initImageDisplay() {
+          const currentConfig = state.isMobile ? 
+            state.imageConfig.mobile : state.imageConfig.desktop;
+          
+          state.currentIndex = Math.floor(Math.random() * currentConfig.paths.length);
+          const selectedImage = currentConfig.paths[state.currentIndex];
+          
+          // 设置占位图
+          elements.randomImage.src = 
             'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 300 300"%3E%3Crect width="500" height="500" fill="rgba(223, 203, 178, 0.3)"%3E%3C/rect%3E%3C/svg%3E';
-          function updateImage(imgSrc) {
-            const img = new Image();
-            img.onload = function () {
-              randomImage.src = imgSrc;
-              randomImage.classList.add("loaded");
-            };
-            img.onerror = function () {
-              if (imgSrc.indexOf("-mobile") > -1) {
-                const desktopSrc = imgSrc.replace("-mobile", "");
-                updateImage(desktopSrc);
-              }
-            };
-            img.src = imgSrc;
-          }
-          function switchRandomImage() {
-            let newIndex;
-            do {
-              newIndex = Math.floor(Math.random() * currentConfig.paths.length);
-            } while (
-              newIndex === currentIndex &&
-              currentConfig.paths.length > 1
-            );
-            currentIndex = newIndex;
-            selectedImage = currentConfig.paths[currentIndex];
-            randomImage.classList.remove("loaded");
-            setTimeout(() => {
-              updateImage(selectedImage);
-            }, 300);
-          }
+          
+          // 加载图片
           updateImage(selectedImage);
-          randomImage.onclick = switchRandomImage;
-          randomImage.onload = function () {
-            if (this.src.indexOf("data:image") === -1) {
-              this.classList.add("loaded");
+        }
+        
+        // 更新图片
+        function updateImage(imgSrc) {
+          if (state.isImageLoading) return;
+          
+          state.isImageLoading = true;
+          elements.imageLoading.style.display = 'block';
+          elements.randomImage.classList.remove("loaded");
+          
+          const img = new Image();
+          
+          img.onload = function () {
+            elements.randomImage.src = imgSrc;
+            elements.randomImage.classList.add("loaded");
+            elements.imageLoading.style.display = 'none';
+            state.isImageLoading = false;
+          };
+          
+          img.onerror = function () {
+            if (imgSrc.indexOf("-mobile") > -1) {
+              const desktopSrc = imgSrc.replace("-mobile", "");
+              updateImage(desktopSrc);
+            } else {
+              elements.imageLoading.style.display = 'none';
+              state.isImageLoading = false;
+              console.error("图片加载失败: ", imgSrc);
             }
           };
-          if (
-            randomImage.complete &&
-            randomImage.src.indexOf("data:image") === -1
-          ) {
-            randomImage.classList.add("loaded");
-          }
-          const imageContainer = document.querySelector(".image-container");
-          const isTouchDevice =
-            "ontouchstart" in window ||
-            navigator.maxTouchPoints > 0 ||
+          
+          img.src = imgSrc;
+        }
+        
+        // 切换随机图片
+        function switchRandomImage() {
+          const currentConfig = state.isMobile ? 
+            state.imageConfig.mobile : state.imageConfig.desktop;
+          
+          let newIndex;
+          do {
+            newIndex = Math.floor(Math.random() * currentConfig.paths.length);
+          } while (newIndex === state.currentIndex && currentConfig.paths.length > 1);
+          
+          state.currentIndex = newIndex;
+          const selectedImage = currentConfig.paths[state.currentIndex];
+          
+          updateImage(selectedImage);
+        }
+        
+        // 设置事件监听
+        function setupEventListeners() {
+          // 图片点击事件
+          elements.randomImage.addEventListener('click', switchRandomImage);
+          
+          // 鼠标移动事件（工具提示）
+          const isTouchDevice = "ontouchstart" in window || 
+            navigator.maxTouchPoints > 0 || 
             navigator.msMaxTouchPoints > 0;
+          
           if (!isTouchDevice) {
-            imageContainer.addEventListener("mousemove", function (e) {
-              const rect = imageContainer.getBoundingClientRect();
+            elements.imageContainer.addEventListener("mousemove", function (e) {
+              const rect = elements.imageContainer.getBoundingClientRect();
               const x = e.clientX - rect.left;
               const y = e.clientY - rect.top;
-              imageTooltip.style.left = x + 10 + "px";
-              imageTooltip.style.top = y - 30 + "px";
-              imageTooltip.style.visibility = "visible";
-              imageTooltip.style.opacity = "1";
+              
+              elements.imageTooltip.style.left = x + 10 + "px";
+              elements.imageTooltip.style.top = y - 30 + "px";
+              elements.imageTooltip.style.visibility = "visible";
+              elements.imageTooltip.style.opacity = "1";
             });
-            imageContainer.addEventListener("mouseleave", function () {
-              imageTooltip.style.visibility = "hidden";
-              imageTooltip.style.opacity = "0";
+            
+            elements.imageContainer.addEventListener("mouseleave", function () {
+              elements.imageTooltip.style.visibility = "hidden";
+              elements.imageTooltip.style.opacity = "0";
             });
           } else {
-            imageContainer.addEventListener("click", function (e) {
-              if (
-                imageTooltip.style.visibility === "hidden" ||
-                imageTooltip.style.opacity === "0"
-              ) {
-                imageTooltip.style.visibility = "visible";
-                imageTooltip.style.opacity = "1";
-                const rect = imageContainer.getBoundingClientRect();
-                imageTooltip.style.left = "50%";
-                imageTooltip.style.top = rect.height - 60 + "px";
-                imageTooltip.style.transform = "translateX(-50%)";
+            elements.imageContainer.addEventListener("click", function (e) {
+              if (e.target === elements.randomImage) return; // 防止与图片点击冲突
+              
+              if (elements.imageTooltip.style.visibility !== "visible") {
+                elements.imageTooltip.style.visibility = "visible";
+                elements.imageTooltip.style.opacity = "1";
+                const rect = elements.imageContainer.getBoundingClientRect();
+                
+                elements.imageTooltip.style.left = "50%";
+                elements.imageTooltip.style.top = rect.height - 60 + "px";
+                elements.imageTooltip.style.transform = "translateX(-50%)";
+                
                 setTimeout(() => {
-                  imageTooltip.style.opacity = "0";
+                  elements.imageTooltip.style.opacity = "0";
                   setTimeout(() => {
-                    imageTooltip.style.visibility = "hidden";
+                    elements.imageTooltip.style.visibility = "hidden";
                   }, 300);
                 }, 2000);
               }
             });
           }
-          let resizeTimer;
-          window.addEventListener("resize", function () {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function () {
-              const newIsMobile = window.innerWidth <= 768;
-              if (newIsMobile !== isMobile) {
-                isMobile = newIsMobile;
-                updateImage(currentConfig.paths[currentIndex]);
+          
+          // 窗口调整大小事件
+          window.addEventListener("resize", utils.debounce(function () {
+            const newIsMobile = window.innerWidth <= 768;
+            if (newIsMobile !== state.isMobile) {
+              state.isMobile = newIsMobile;
+              const currentConfig = state.isMobile ? 
+                state.imageConfig.mobile : state.imageConfig.desktop;
+              
+              // 确保当前索引有效
+              if (state.currentIndex >= currentConfig.paths.length) {
+                state.currentIndex = 0;
               }
-            }, 250);
-          });
-          window.dispatchEvent(new Event("resize"));
-          window.addEventListener("orientationchange", function () {
-            setTimeout(function () {
-              if (
-                isTouchDevice &&
-                imageTooltip.style.visibility === "visible"
-              ) {
-                const rect = imageContainer.getBoundingClientRect();
-                imageTooltip.style.left = "50%";
-                imageTooltip.style.top = rect.height - 60 + "px";
-              }
-            }, 300);
-          });
+              
+              updateImage(currentConfig.paths[state.currentIndex]);
+            }
+          }, 250));
+          
+          // 移动端触摸反馈
           if (isTouchDevice) {
             const allLinks = document.querySelectorAll(".normal-content a");
             allLinks.forEach((link) => {
               link.addEventListener("touchstart", function () {
                 this.style.transform = "scale(0.98)";
               });
+              
               link.addEventListener("touchend", function () {
                 this.style.transform = "scale(1)";
               });
             });
           }
-        });
+        }
+        
+        // 启动应用
+        initApp();
       });
     </script>
   </body>
